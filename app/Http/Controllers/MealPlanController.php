@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMealPlanRequest;
 use App\Http\Requests\UpdateMealPlanRequest;
 use App\Http\Resources\MealPlanResource;
-use App\Models\Meal;
 use App\Models\MealPlan;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Illuminate\Http\Response;
 
 class MealPlanController extends Controller
 {
@@ -27,15 +25,7 @@ class MealPlanController extends Controller
      */
     public function store(StoreMealPlanRequest $request): MealPlanResource
     {
-        $payload = $request->validated();
-        foreach ($payload['meals'] as $index => $meal) {
-            $mealRecipe = Meal::whereIn('id', $meal['recipes'])
-                ->get(['id as _id', 'name', 'description', 'image'])
-                ->toArray();
-            $payload['meals'][$index]['recipes'] = $mealRecipe;
-        }
-
-        $mealPlan = MealPlan::create($payload);
+        $mealPlan = MealPlan::create($request->validated());
         return new MealPlanResource($mealPlan);
     }
 
@@ -52,26 +42,16 @@ class MealPlanController extends Controller
      */
     public function update(UpdateMealPlanRequest $request, MealPlan $mealPlan): MealPlanResource
     {
-        $payload = $request->validated();
-        foreach ($payload['meals'] as $index => $meal) {
-            $mealRecipe = Meal::whereIn('id', $meal['recipes'])
-                ->get(['id as _id', 'name', 'description', 'image'])
-                ->toArray();
-            $payload['meals'][$index]['recipes'] = $mealRecipe;
-        }
-
-        $mealPlan->update($payload);
+        $mealPlan->update($request->validated());
         return new MealPlanResource($mealPlan->refresh());
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MealPlan $mealPlan): JsonResponse
+    public function destroy(MealPlan $mealPlan): Response
     {
         $mealPlan->delete();
-        return response()->json([
-            'message' => 'Meal plan deleted successfully.'
-        ], ResponseAlias::HTTP_OK);
+        return response()->noContent();
     }
 }

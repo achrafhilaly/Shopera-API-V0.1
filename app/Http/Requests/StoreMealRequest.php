@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,9 @@ class StoreMealRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->role === 'admin';
+        /** @var User $user */
+        $user = auth()->user();
+        return $user && $user->isAdmin();
     }
 
     /**
@@ -26,11 +29,11 @@ class StoreMealRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'image' => ['nullable', 'string'],
+            'sku' => ['required', 'string', 'max:100', 'unique:meals,sku'],
             'calories' => ['required', 'numeric', 'min:0'],
             'protein' => ['required', 'numeric', 'min:0'],
             'carbohydrates' => ['required', 'numeric', 'min:0'],
             'fats' => ['required', 'numeric', 'min:0'],
-            'meal_type' => ['required', 'string', 'in:breakfast,lunch,dinner,snack'],
         ];
     }
 }
