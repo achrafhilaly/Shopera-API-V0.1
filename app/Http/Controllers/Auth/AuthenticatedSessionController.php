@@ -22,11 +22,7 @@ class AuthenticatedSessionController extends Controller
 
         /* @var User $user */
         $user = $request->user();
-        $token = $user->createToken(
-            $user->getAttribute('name'),
-            ['*'],
-            now()->addHours(24)
-        )->plainTextToken;
+        $token = $user->createToken($user->getAttribute('name'))->plainTextToken;
 
         return response()->json([
             'token' => $token,

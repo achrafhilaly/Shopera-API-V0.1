@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMealPlanBuildRequest;
 use App\Http\Requests\StoreMealPlanRequest;
 use App\Http\Requests\UpdateMealPlanRequest;
 use App\Http\Resources\MealPlanResource;
@@ -53,5 +54,14 @@ class MealPlanController extends Controller
     {
         $mealPlan->delete();
         return response()->noContent();
+    }
+
+    /**
+     * Store a newly created meal plan build in storage.
+     */
+    public function storeBuild(MealPlan $mealPlan, StoreMealPlanBuildRequest $request): MealPlanResource
+    {
+        $mealPlan->update($request->validated());
+        return new MealPlanResource($mealPlan->refresh());
     }
 }
