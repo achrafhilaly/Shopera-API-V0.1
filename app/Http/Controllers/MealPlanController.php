@@ -26,7 +26,9 @@ class MealPlanController extends Controller
      */
     public function store(StoreMealPlanRequest $request): MealPlanResource
     {
-        $mealPlan = MealPlan::create($request->validated());
+        $data = $request->validated();
+        $data['status'] = 'inactive';
+        $mealPlan = MealPlan::create($data);
         return new MealPlanResource($mealPlan);
     }
 
@@ -61,7 +63,9 @@ class MealPlanController extends Controller
      */
     public function storeBuild(MealPlan $mealPlan, StoreMealPlanBuildRequest $request): MealPlanResource
     {
-        $mealPlan->update($request->validated());
+        $data = $request->validated();
+        $data['status'] = 'active';
+        $mealPlan->update($data);
         return new MealPlanResource($mealPlan->refresh());
     }
 }

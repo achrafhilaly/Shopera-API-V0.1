@@ -32,7 +32,9 @@ class MealController extends Controller
      */
     public function store(StoreMealRequest $request): MealResource
     {
-        $meal = Meal::create($request->validated());
+        $data = $request->validated();
+        $data['status'] = 'active';
+        $meal = Meal::create($data);
         return new MealResource($meal);
     }
 

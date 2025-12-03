@@ -34,6 +34,7 @@ class StoreMealPlanRequest extends FormRequest
             'lunch_price_per_day' => 'required|numeric|min:0|max:100',
             'dinner_price_per_day' => 'required|numeric|min:0|max:100',
             'snack_price_per_day' => 'required|numeric|min:0|max:100',
+            'status' => 'nullable|in:active,inactive|default:inactive',
         ];
     }
 }

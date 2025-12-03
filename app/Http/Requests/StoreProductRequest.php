@@ -14,8 +14,8 @@ class StoreProductRequest extends FormRequest
     public function authorize(): bool
     {
         /** @var User $user */
-        $user = $this->user();
-        return $user?->role === 'admin';
+        $user = auth()->user();
+        return $user && $user->isAdmin();
     }
 
     /**
