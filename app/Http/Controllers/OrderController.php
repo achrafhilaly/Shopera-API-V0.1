@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\ValidateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\MealPlan;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 class OrderController extends Controller
@@ -121,44 +119,6 @@ class OrderController extends Controller
     public function show(Order $order): OrderResource
     {
         return new OrderResource($order);
-    }
-
-    /**
-     * Validate a pending order.
-     * Only admins can validate orders.
-     */
-    public function validate(ValidateOrderRequest $request, Order $order): JsonResponse
-    {
-        // Check if order is in Pending status
-        if ($order->status !== 'Pending') {
-            return response()->json([
-                'message' => 'Only pending orders can be validated.',
-                'current_status' => $order->status
-            ], 422);
-        }
-
-        $data = $request->validated();
-        
-        // Get the authenticated admin user from the Bearer token
-        /** @var User $user */
-        $user = auth()->user();
-
-        // Update order with validation info
-        $order->update([
-            'status' => 'Validated',
-            'validated_at' => now(),
-            'validated_by' => [
-                'user_id' => $user->id,
-                'user_name' => $user->name,
-                'user_email' => $user->email,
-            ],
-            'validation_comment' => $data['comment'],
-        ]);
-
-        return response()->json([
-            'message' => 'Order validated successfully',
-            'data' => new OrderResource($order->fresh())
-        ], 200);
     }
 }
 

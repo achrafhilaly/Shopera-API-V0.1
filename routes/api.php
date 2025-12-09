@@ -28,7 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Orders
     Route::post('/orders', [OrderController::class, 'store']);
     Route::get('/orders/{order}', [OrderController::class, 'show']);
-    Route::post('/orders/{order}/validate', [OrderController::class, 'validate']);
 
     // Settings
     Route::put('/settings/profile', [UserController::class, 'updateMyProfile']);
