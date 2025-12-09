@@ -23,6 +23,9 @@ class OrderResource extends JsonResource
             'tax' => $this->tax,
             'total' => $this->total,
             'status' => $this->status,
+            'validated_at' => $this->validated_at,
+            'validated_by' => $this->validated_by,
+            'validation_comment' => $this->validation_comment,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
