@@ -21,6 +21,7 @@ class Order extends Model
         return [
             'line_items' => 'array',
             'client_info' => 'array',
+            'status_history' => 'array',
         ];
     }
 

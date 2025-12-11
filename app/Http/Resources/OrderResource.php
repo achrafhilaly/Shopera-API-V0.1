@@ -23,6 +23,7 @@ class OrderResource extends JsonResource
             'tax' => $this->tax,
             'total' => $this->total,
             'status' => $this->status,
+            'status_history' => $this->status_history ?? [],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

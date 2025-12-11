@@ -3,14 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderStatusRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\MealPlan;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class OrderController extends Controller
 {
+    /**
+     * Display a listing of all orders.
+     */
+    public function index(Request $request): AnonymousResourceCollection
+    {
+        $query = Order::query()->orderByDesc('created_at');
+        
+        // Filter by status if provided
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        
+        // Filter by client email if provided
+        if ($request->filled('client_email')) {
+            $query->where('client_info.email', $request->client_email);
+        }
+        
+        // Pagination
+        $perPage = $request->input('per_page', 15);
+        $orders = $query->paginate($perPage);
+        
+        return OrderResource::collection($orders);
+    }
+
     /**
      * Store a newly created order in storage.
      */
@@ -25,7 +52,7 @@ class OrderController extends Controller
                 'email' => $data['client_email'],
                 'phone' => $data['client_phone'],
             ],
-            'status' => 'Pending',
+            'status' => $data['status'],
             'line_items' => [],
             'subtotal' => 0,
             'tax' => 0,
@@ -119,6 +146,41 @@ class OrderController extends Controller
     public function show(Order $order): OrderResource
     {
         return new OrderResource($order);
+    }
+
+    /**
+     * Update the order status.
+     */
+    public function updateStatus(Order $order, UpdateOrderStatusRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $newStatus = $validated['Status'];
+        $comment = $validated['Comment'];
+        $oldStatus = $order->status;
+        
+        // Get status history or initialize empty array
+        $statusHistory = $order->status_history ?? [];
+        
+        // Add new history entry
+        $statusHistory[] = [
+            'old_status' => $oldStatus,
+            'new_status' => $newStatus,
+            'comment' => $comment,
+            'updated_by_user_id' => auth()->id(),
+            'updated_by_user_name' => auth()->user()->name,
+            'updated_at' => now()->toISOString(),
+        ];
+        
+        // Update order with new status and history
+        $order->update([
+            'status' => $newStatus,
+            'status_history' => $statusHistory,
+        ]);
+        
+        return response()->json([
+            'message' => 'Order status updated successfully',
+            'data' => new OrderResource($order->refresh())
+        ], 200);
     }
 }
 
