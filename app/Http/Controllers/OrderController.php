@@ -11,6 +11,8 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
@@ -44,15 +46,17 @@ class OrderController extends Controller
     public function store(StoreOrderRequest $request): JsonResponse
     {
         $data = $request->validated();
+        $taxRate = 0.20;
         
         // Initialize order data
         $orderData = [
             'client_info' => [
-                'name' => $data['client_name'],
-                'email' => $data['client_email'],
-                'phone' => $data['client_phone'],
+                'name' => $data['contact_name'],
+                'email' => $data['contact_email'],
+                'phone' => $data['contact_phone'],
             ],
-            'status' => $data['status'],
+            'status' => 'Confirmed',
+            'order_number' => Str::upper(Str::random(10)),
             'line_items' => [],
             'subtotal' => 0,
             'tax' => 0,
@@ -88,48 +92,25 @@ class OrderController extends Controller
             $orderData['line_items'] = $lineItems;
             $orderData['subtotal'] = round($subtotal, 2);
             $orderData['order_type'] = 'products';
+            $orderData['tax'] = round($orderData['subtotal'] * $taxRate, 2);
+            $orderData['total'] = round($orderData['subtotal'] + $orderData['tax'], 2);
         }
 
         // Process Meal Plan Order
-        if (isset($data['meal_plan_id']) && isset($data['days'])) {
+        if (isset($data['meal_plan_id'])) {
             $mealPlan = MealPlan::findOrFail($data['meal_plan_id']);
-            $days = $data['days'];
+            $deliveryDays = $data['delivery_days'];
+            $menuSelections = $data['menu_selections_array'];
+            $preferences = $data['preferences'];
 
-            // Calculate daily price (breakfast + lunch + dinner)
-            $breakfastPrice = $mealPlan->breakfast_price_per_day ?? 0;
-            $lunchPrice = $mealPlan->lunch_price_per_day ?? 0;
-            $dinnerPrice = $mealPlan->dinner_price_per_day ?? 0;
-            
-            $dailyPrice = $breakfastPrice + $lunchPrice + $dinnerPrice;
-            $subtotal = $dailyPrice * $days;
-
-            $lineItems = [
-                [
-                    'type' => 'meal_plan',
-                    'meal_plan_id' => $mealPlan->id,
-                    'meal_plan_name' => $mealPlan->name,
-                    'meal_plan_sku' => $mealPlan->sku,
-                    'days' => $days,
-                    'daily_price' => round($dailyPrice, 2),
-                    'price_breakdown' => [
-                        'breakfast' => $breakfastPrice,
-                        'lunch' => $lunchPrice,
-                        'dinner' => $dinnerPrice,
-                    ],
-                    'subtotal' => round($subtotal, 2),
-                ],
-            ];
-
-            $orderData['line_items'] = $lineItems;
-            $orderData['subtotal'] = round($subtotal, 2);
-            $orderData['meal_plan_id'] = $mealPlan->id;
             $orderData['order_type'] = 'meal_plan';
+            $orderData['meal_plan_id'] = $mealPlan->id;
+            $orderData['delivery_days'] = $deliveryDays;
+            $orderData['menu_selections'] = $menuSelections;
+            $orderData['preferences'] = $preferences;
+            $orderData['delivery_address'] = $data['delivery_address'];
+            $orderData['total'] = $data['total_price'];
         }
-
-        // Calculate tax (assuming 10% tax rate - you can make this configurable)
-        $taxRate = 0.20;
-        $orderData['tax'] = round($orderData['subtotal'] * $taxRate, 2);
-        $orderData['total'] = round($orderData['subtotal'] + $orderData['tax'], 2);
 
         // Create order
         $order = Order::create($orderData);
@@ -166,8 +147,7 @@ class OrderController extends Controller
             'old_status' => $oldStatus,
             'new_status' => $newStatus,
             'comment' => $comment,
-            'updated_by_user_id' => auth()->id(),
-            'updated_by_user_name' => auth()->user()->name,
+            'updated_by_user_id' => Auth::id(),
             'updated_at' => now()->toISOString(),
         ];
         

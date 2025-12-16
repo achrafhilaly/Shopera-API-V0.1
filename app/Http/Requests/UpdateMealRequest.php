@@ -37,7 +37,6 @@ class UpdateMealRequest extends FormRequest
             'protein' => ['required', 'numeric', 'min:0'],
             'carbohydrates' => ['required', 'numeric', 'min:0'],
             'fats' => ['required', 'numeric', 'min:0'],
-            'status' => ['required', Rule::in(['active', 'inactive'])],
         ];
     }
 }
