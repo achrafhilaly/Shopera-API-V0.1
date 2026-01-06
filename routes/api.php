@@ -42,9 +42,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/meal-plans/{meal_plan}/builder', [MealPlanController::class, 'storeBuild']);
 
     // API resources
-    Route::apiResource('meal-plans', MealPlanController::class)->except('show');
+    Route::apiResource('meal-plans', MealPlanController::class)->except('show', 'index');
     Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('products', ProductController::class)->except('show');
+    Route::apiResource('products', ProductController::class)->except('show', 'index');
     Route::apiResource('meals', MealController::class)->except('index', 'show');
     Route::apiResource('users', UserController::class);
 

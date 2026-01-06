@@ -71,11 +71,13 @@ class ProductController extends Controller
      */
     public function home(): AnonymousResourceCollection
     {
-        $products = Product::with([
+        $products = Product::where('status', 'active')
+        ->with([
             'category' => function ($query) {
                 $query->select('_id', 'name');
             }
-        ])->orderByDesc('updated_at')->take(4)->get();
+        ])
+        ->orderByDesc('updated_at')->take(4)->get();
 
         return ProductResource::collection($products);
     }

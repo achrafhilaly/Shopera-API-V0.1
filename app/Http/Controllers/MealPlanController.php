@@ -74,7 +74,7 @@ class MealPlanController extends Controller
      */
     public function home(): AnonymousResourceCollection
     {
-        $mealPlans = MealPlan::latest()->take(4)->get();
+        $mealPlans = MealPlan::where('status', 'active')->latest()->take(4)->get();
         return MealPlanResource::collection($mealPlans);
     }
 }
