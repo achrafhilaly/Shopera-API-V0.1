@@ -65,4 +65,18 @@ class ProductController extends Controller
         $product->delete();
         return response()->noContent();
     }
+
+        /**
+     * Display a listing of the resource for home page.
+     */
+    public function home(): AnonymousResourceCollection
+    {
+        $products = Product::with([
+            'category' => function ($query) {
+                $query->select('_id', 'name');
+            }
+        ])->orderByDesc('updated_at')->take(4)->get();
+
+        return ProductResource::collection($products);
+    }
 }

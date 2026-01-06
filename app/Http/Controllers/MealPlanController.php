@@ -68,4 +68,13 @@ class MealPlanController extends Controller
         $mealPlan->update($data);
         return new MealPlanResource($mealPlan->refresh());
     }
+
+    /**
+     * Display a listing of the resource for home page.
+     */
+    public function home(): AnonymousResourceCollection
+    {
+        $mealPlans = MealPlan::latest()->take(4)->get();
+        return MealPlanResource::collection($mealPlans);
+    }
 }

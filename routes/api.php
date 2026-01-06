@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Storage;
 
 require __DIR__.'/auth.php';
 
-Route::apiResource('meal-plans', MealPlanController::class)->only('index', 'show');
+Route::get('meal-plans/home', [MealPlanController::class, 'home']);
+Route::apiResource('meal-plans', MealPlanController::class)->only('show', 'index');
+Route::get('products/home', [ProductController::class, 'home']);
+Route::apiResource('products', ProductController::class)->only('show', 'index');
 Route::apiResource('meals', MealController::class)->only('index', 'show');
-Route::apiResource('products', ProductController::class)->only('index', 'show');
 Route::post('/orders', [OrderController::class, 'store']);
 Route::get('/orders/{order}', [OrderController::class, 'show']);
 
@@ -40,9 +42,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/meal-plans/{meal_plan}/builder', [MealPlanController::class, 'storeBuild']);
 
     // API resources
-    Route::apiResource('meal-plans', MealPlanController::class)->except('index', 'show');
+    Route::apiResource('meal-plans', MealPlanController::class)->except('show');
     Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('products', ProductController::class)->except('index', 'show');
+    Route::apiResource('products', ProductController::class)->except('show');
     Route::apiResource('meals', MealController::class)->except('index', 'show');
     Route::apiResource('users', UserController::class);
 
