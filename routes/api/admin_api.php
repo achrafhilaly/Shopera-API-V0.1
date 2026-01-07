@@ -4,8 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Log, Route, Storage};
 
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\MealController;
-use App\Http\Controllers\MealPlanController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -28,14 +26,9 @@ Route::middleware('auth:sanctum')->group(function () {
     })->where('path', '.*');
 
 
-    // Meal plan builder route
-    Route::post('/meal-plans/{meal_plan}/builder', [MealPlanController::class, 'storeBuild']);
-
     // API resources
-    Route::apiResource('meal-plans', MealPlanController::class)->except('show', 'index');
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('products', ProductController::class)->except('show', 'index');
-    Route::apiResource('meals', MealController::class)->except('index', 'show');
     Route::apiResource('users', UserController::class);
 
     // Orders

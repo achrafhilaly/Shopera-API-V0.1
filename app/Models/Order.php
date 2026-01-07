@@ -5,7 +5,6 @@ namespace App\Models;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MongoDB\Laravel\Eloquent\Model;
 
@@ -23,11 +22,6 @@ class Order extends Model
             'client_info' => 'array',
             'status_history' => 'array',
         ];
-    }
-
-    public function mealPlan(): BelongsTo
-    {
-        return $this->belongsTo(MealPlan::class);
     }
 }
 
