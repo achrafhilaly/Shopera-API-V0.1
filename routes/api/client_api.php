@@ -9,7 +9,10 @@ use App\Http\Controllers\ProductController;
 
 Route::get('categories/express-shop', [CategoryController::class, 'expressShop']);
 
-Route::apiResource('meals', MealController::class)->only('index', 'show');
+Route::controller(MealController::class)->group(function () {
+    Route::get('meals/recipes', 'recipes');
+    Route::apiResource('meals', MealController::class)->only('index', 'show');
+});
 
 Route::controller(MealPlanController::class)->group(function () {
     Route::get('meal-plans/home', 'home');

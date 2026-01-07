@@ -19,6 +19,7 @@ class MediaController extends Controller
         $extension = pathinfo($data['filename'], PATHINFO_EXTENSION);
         $path = 'meals/' . Str::uuid() . '.' . $extension;
 
+        /** @var Storage $disk */
         $disk = Storage::disk('s3');
 
         // 1. Presigned upload URL (PUT)

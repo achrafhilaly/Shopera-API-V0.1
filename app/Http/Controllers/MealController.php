@@ -9,6 +9,7 @@ use App\Models\Meal;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 class MealController extends Controller
 {
@@ -62,5 +63,47 @@ class MealController extends Controller
     {
         $meal->delete();
         return response()->noContent();
+    }
+
+    /**
+     * Display a listing of the resource for recipes page.
+     */
+    public function recipes(Request $request): JsonResponse
+    {
+        $limit = 9;
+        $offset = (int)$request->input('offset', 0);
+        $search = $request->input('search');
+
+        $query = Meal::where('status', 'active');
+
+        // Apply search if provided
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        // Get total count before pagination
+        $total = $query->count();
+
+        // Get paginated meals
+        $meals = $query->orderByDesc('updated_at')->offset($offset)->take($limit)->get();
+
+        // Calculate pagination metadata
+        $totalPages = (int) ceil($total / $limit);
+        $currentPage = (int) floor($offset / $limit) + 1;
+        $hasNextPage = ($offset + $limit) < $total;
+        $hasPreviousPage = $offset > 0;
+
+        return response()->json([
+            'data' => MealResource::collection($meals),
+            'pagination' => [
+                'total' => $total,
+                'per_page' => $limit,
+                'current_page' => $currentPage,
+                'total_pages' => $totalPages,
+                'offset' => $offset,
+                'has_next_page' => $hasNextPage,
+                'has_previous_page' => $hasPreviousPage,
+            ],
+        ]);
     }
 }
