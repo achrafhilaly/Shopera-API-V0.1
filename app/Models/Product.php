@@ -14,6 +14,8 @@ class Product extends Model
     /** @use HasFactory<ProductFactory> */
     use HasFactory, HasUuids, SoftDeletes;
 
+    protected string $collection = 'products';
+
     protected $guarded = [];
 
 

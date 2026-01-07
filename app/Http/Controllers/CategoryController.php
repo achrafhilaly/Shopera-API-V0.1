@@ -58,4 +58,17 @@ class CategoryController extends Controller
             Response::HTTP_NO_CONTENT
         );
     }
+
+    /**
+     * Display a listing of the resource for express shop page.
+     */
+    public function expressShop(): AnonymousResourceCollection
+    {
+        $categories = Category::whereHas('products', function ($query) {
+                $query->where('status', 'active');
+            })
+            ->get();
+        
+        return CategoryResource::collection($categories);
+    }
 }
