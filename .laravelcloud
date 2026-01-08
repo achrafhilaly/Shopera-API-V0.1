@@ -1,0 +1,18 @@
+# Laravel Cloud Deployment Configuration
+# This file helps Laravel Cloud understand your project structure
+
+# MongoDB Atlas Connection String Template
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
+# MONGODB_DATABASE=shopera_production
+
+# Required Environment Variables for Production:
+# - APP_NAME, APP_ENV, APP_DEBUG, APP_KEY, APP_URL
+# - DB_CONNECTION=mongodb
+# - MONGODB_URI (from MongoDB Atlas)
+# - MONGODB_DATABASE
+# - SANCTUM_STATEFUL_DOMAINS
+# - AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY (for S3 storage)
+# - MAIL_* (mail configuration)
+
+# Note: Configure these in Laravel Cloud Dashboard -> Environment Variables
+

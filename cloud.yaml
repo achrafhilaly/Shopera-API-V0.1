@@ -1,0 +1,17 @@
+id: shopera-api
+name: Shopera API
+environments:
+  production:
+    deploy:
+      - 'composer install --no-dev --optimize-autoloader'
+      - 'php artisan config:cache'
+      - 'php artisan route:cache'
+      - 'php artisan view:cache'
+    daemon:
+      - 'php artisan queue:work --tries=3 --timeout=90'
+    scheduler: true
+    database: none
+    php: 8.3
+    extensions:
+      - mongodb
+
