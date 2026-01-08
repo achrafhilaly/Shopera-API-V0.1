@@ -1,11 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "shopera/shopera-api-v0.1",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Shopera API - Multi-tenant e-commerce backend API with MongoDB",
     "keywords": [
+        "shopera",
+        "e-commerce",
+        "api",
         "laravel",
-        "framework"
+        "mongodb"
     ],
     "license": "MIT",
     "require": {

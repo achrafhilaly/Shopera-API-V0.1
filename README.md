@@ -1,61 +1,188 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Shopera-API-V0.1
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, multi-tenant e-commerce backend API built with Laravel 12 and MongoDB.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Core E-Commerce Functionality
+- **Product Management**: Full CRUD operations for products with variants, pricing, and stock management
+- **Category Management**: Hierarchical category system with parent/child relationships
+- **Order Management**: Complete order processing with status tracking and history
+- **User Management**: Role-based access control (Admin/User) with Sanctum authentication
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Technical Highlights
+- ✅ **36 API Endpoints** (100% tested and passing)
+- ✅ **MongoDB Integration** via Laravel MongoDB package
+- ✅ **RESTful API Design** with proper resource transformations
+- ✅ **Authentication** using Laravel Sanctum
+- ✅ **Comprehensive Validation** with Form Requests
+- ✅ **API Documentation** via Scramble
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📦 Product Types Supported
 
-## Learning Laravel
+The API is designed to handle various product types, currently optimized for:
+- **Paper Products**: Copy paper, cardstock, specialty paper, envelopes
+- **Configurable Products**: Products with variants (size, color, GSM, etc.)
+- **Bulk Products**: Support for different pack sizes and quantities
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Tech Stack
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Framework**: Laravel 12
+- **Database**: MongoDB 5.x
+- **Authentication**: Laravel Sanctum
+- **PHP**: 8.3+
+- **API Documentation**: Scramble
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📋 API Endpoints Overview
 
-## Laravel Sponsors
+### Authentication (8 endpoints)
+- POST `/api/register` - User registration
+- POST `/api/login` - User login
+- POST `/api/logout` - User logout
+- GET `/api/user` - Get authenticated user
+- POST `/api/forgot-password` - Password reset request
+- POST `/api/email/verification-notification` - Resend verification
+- GET `/sanctum/csrf-cookie` - CSRF token
+- GET `/health` - Health check
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### User Management (6 endpoints)
+- GET `/api/users` - List all users (Admin)
+- POST `/api/users` - Create user (Admin)
+- GET `/api/users/{id}` - Show user (Admin)
+- PUT `/api/users/{id}` - Update user (Admin)
+- DELETE `/api/users/{id}` - Delete user (Admin)
+- PUT `/api/settings/profile` - Update own profile
 
-### Premium Partners
+### Categories (6 endpoints)
+- GET `/api/categories` - List all categories (Admin)
+- POST `/api/categories` - Create category (Admin)
+- GET `/api/categories/{id}` - Show category (Admin)
+- PUT `/api/categories/{id}` - Update category (Admin)
+- DELETE `/api/categories/{id}` - Delete category (Admin)
+- GET `/api/categories/express-shop` - Public category listing
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Products (7 endpoints)
+- GET `/api/products` - List all products
+- POST `/api/products` - Create product (Admin)
+- GET `/api/products/{id}` - Show product details
+- PUT `/api/products/{id}` - Update product (Admin)
+- DELETE `/api/products/{id}` - Delete product (Admin)
+- GET `/api/products/home` - Home page products
+- GET `/api/products/express-shop` - Express shop products
 
-## Contributing
+### Orders (4 endpoints)
+- GET `/api/orders` - List all orders (Admin)
+- POST `/api/orders` - Create order
+- GET `/api/orders/{id}` - Show order details
+- PUT `/api/orders/{id}/status` - Update order status
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Media & Documentation (4 endpoints)
+- POST `/api/media/upload` - Upload media files
+- GET `/api/images/{path}` - Serve images
+- GET `/docs/api` - API documentation UI
+- GET `/docs/api.json` - API documentation JSON
 
-## Code of Conduct
+## 🚦 Getting Started
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Prerequisites
+- PHP 8.3 or higher
+- MongoDB 5.x or higher
+- Composer
+- MongoDB PHP Extension
 
-## Security Vulnerabilities
+### Installation
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. **Clone the repository**
+```bash
+git clone https://github.com/achrafhilaly/Shopera-API-V0.1.git
+cd Shopera-API-V0.1
+```
 
-## License
+2. **Install dependencies**
+```bash
+composer install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. **Configure environment**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+4. **Configure MongoDB connection in `.env`**
+```env
+DB_CONNECTION=mongodb
+MONGODB_URI=your_mongodb_connection_string
+MONGODB_DATABASE=your_database_name
+```
+
+5. **Start the development server**
+```bash
+php artisan serve
+```
+
+The API will be available at `http://127.0.0.1:8000`
+
+## 📝 Sample Data
+
+### Seed Paper Products
+Run the seeding script to add 20 sample paper products:
+```bash
+./seed-paper-products.sh
+```
+
+This will create:
+- 4 categories (Copy Paper, Cardstock, Specialty Paper, Envelopes)
+- 20 products with complete details and metadata
+
+## 🧪 Testing
+
+Run the comprehensive test suite:
+```bash
+./test-all-endpoints.sh
+```
+
+This will test all 36 endpoints with proper authentication and validation.
+
+## 📖 API Documentation
+
+Visit `/docs/api` when the server is running to access the interactive API documentation.
+
+## 🔒 Authentication
+
+The API uses Laravel Sanctum for authentication. To access protected endpoints:
+
+1. **Login** to get a bearer token:
+```bash
+POST /api/login
+{
+  "email": "user@example.com",
+  "password": "password"
+}
+```
+
+2. **Include the token** in subsequent requests:
+```bash
+Authorization: Bearer your-token-here
+```
+
+## 🏗️ Architecture
+
+- **Single Codebase, Multiple Deployments**: Designed for multi-tenant deployment
+- **Separate Database per Tenant**: Each deployment connects to its own MongoDB database
+- **RESTful Design**: Standard REST conventions with proper HTTP methods
+- **Resource Transformers**: Consistent API response format
+- **Request Validation**: All inputs validated via Form Requests
+- **Role-Based Access**: Admin and User roles with appropriate permissions
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+## 📧 Contact
+
+For questions or support, please open an issue on GitHub.
