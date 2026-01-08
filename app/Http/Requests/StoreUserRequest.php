@@ -15,7 +15,7 @@ class StoreUserRequest extends FormRequest
     {
         /** @var User $user */
         $user = $this->user();
-        return $user?->role === 'admin';
+        return $user?->role === \App\Enums\Role::ADMIN;
     }
 
     /**

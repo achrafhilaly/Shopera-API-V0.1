@@ -16,7 +16,7 @@ class UpdateUserRequest extends FormRequest
     {
         /** @var User $user */
         $user = $this->user();
-        return $user && $user?->role === 'admin';
+        return $user && $user?->role === \App\Enums\Role::ADMIN;
     }
 
     /**
