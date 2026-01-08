@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,9 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->role === 'admin';
+        /** @var User $user */
+        $user = auth()->user();
+        return $user && $user->isAdmin();
     }
 
     /**

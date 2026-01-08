@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderStatusRequest;
 use App\Http\Resources\OrderResource;
-use App\Models\MealPlan;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -94,22 +93,6 @@ class OrderController extends Controller
             $orderData['order_type'] = 'products';
             $orderData['tax'] = round($orderData['subtotal'] * $taxRate, 2);
             $orderData['total'] = round($orderData['subtotal'] + $orderData['tax'], 2);
-        }
-
-        // Process Meal Plan Order
-        if (isset($data['meal_plan_id'])) {
-            $mealPlan = MealPlan::findOrFail($data['meal_plan_id']);
-            $deliveryDays = $data['delivery_days'];
-            $menuSelections = $data['menu_selections_array'];
-            $preferences = $data['preferences'];
-
-            $orderData['order_type'] = 'meal_plan';
-            $orderData['meal_plan_id'] = $mealPlan->id;
-            $orderData['delivery_days'] = $deliveryDays;
-            $orderData['menu_selections'] = $menuSelections;
-            $orderData['preferences'] = $preferences;
-            $orderData['delivery_address'] = $data['delivery_address'];
-            $orderData['total'] = $data['total_price'];
         }
 
         // Create order
